@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    @apply text-[rgba(255,255,255,0.87)] bg-[#242424] font-sans;
+  }
+
+  body {
+    @apply grid place-items-center min-w-[320px] min-h-screen relative m-0;
+  }
+}
+
+/* ── Custom font utilities ──────────────────────────────────────────────── */
+@layer utilities {
+  .font-device { font-family: 'Courier New', 'Lucida Console', monospace; }
+  .font-lcd    { font-family: 'Share Tech Mono', 'Courier New', monospace; }
+}
+
+/* ── Keyframes ──────────────────────────────────────────────────────────── */
+@keyframes pulse-ring {
+  0%   { transform: scale(1);   opacity: 0.65; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes led-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+
+@keyframes dot-wave {
+  0%, 100% { opacity: 0.2; }
+  50%       { opacity: 1; }
+}
+
+/* ── Grille dot staggered delays (nth-child can't be done with Tailwind) ── */
+.grille-dot:nth-child(1) { transition-delay:   0ms; }
+.grille-dot:nth-child(2) { transition-delay:  25ms; }
+.grille-dot:nth-child(3) { transition-delay:  50ms; }
+.grille-dot:nth-child(4) { transition-delay:  75ms; }
+.grille-dot:nth-child(5) { transition-delay: 100ms; }
+.grille-dot:nth-child(6) { transition-delay: 125ms; }
+.grille-dot:nth-child(7) { transition-delay: 150ms; }
+.grille-dot:nth-child(8) { transition-delay: 175ms; }
+.grille-dot:nth-child(9) { transition-delay: 200ms; }
+
+.is-active .grille-dot:nth-child(1) { animation-delay:   0ms; }
+.is-active .grille-dot:nth-child(2) { animation-delay:  80ms; }
+.is-active .grille-dot:nth-child(3) { animation-delay: 160ms; }
+.is-active .grille-dot:nth-child(4) { animation-delay: 240ms; }
+.is-active .grille-dot:nth-child(5) { animation-delay: 320ms; }
+.is-active .grille-dot:nth-child(6) { animation-delay: 400ms; }
+.is-active .grille-dot:nth-child(7) { animation-delay: 480ms; }
+.is-active .grille-dot:nth-child(8) { animation-delay: 560ms; }
+.is-active .grille-dot:nth-child(9) { animation-delay: 640ms; }
+
+/* ── Frequency slider (pseudo-elements can't use Tailwind) ─────────────── */
+.freq-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  touch-action: none;
+  background: linear-gradient(
+    to right,
+    #e07000 var(--freq-pct, 50%),
+    #2c2c2c var(--freq-pct, 50%)
+  );
+}
+
+.freq-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #ffb347, #e07000 70%);
+  box-shadow:
+    0 0 0 3px rgba(224,112,0,.2),
+    0 0 14px rgba(224,112,0,.55),
+    0 2px 8px rgba(0,0,0,.8);
+  cursor: pointer;
+  border: 1.5px solid rgba(255,180,70,.6);
+  transition: box-shadow 0.15s;
+}
+
+.freq-slider::-webkit-slider-thumb:active {
+  box-shadow:
+    0 0 0 6px rgba(224,112,0,.25),
+    0 0 22px rgba(224,112,0,.7),
+    0 2px 8px rgba(0,0,0,.8);
+}
+
+.freq-slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #ffb347, #e07000 70%);
+  box-shadow:
+    0 0 0 3px rgba(224,112,0,.2),
+    0 0 14px rgba(224,112,0,.55),
+    0 2px 8px rgba(0,0,0,.8);
+  cursor: pointer;
+  border: 1.5px solid rgba(255,180,70,.6);
+}
+
+/* ── Mobile: full-screen shell ──────────────────────────────────────────── */
+@media (max-width: 479px) {
+  html, body {
+    overflow: hidden;
+    height: 100dvh;
+  }
+
+  .device-shell {
+    width: 100dvw;
+    height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
