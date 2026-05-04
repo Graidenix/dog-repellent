@@ -1,0 +1,26 @@
+{
+  "name": "Ultrasonic Dog Repeller",
+  "short_name": "Dog Repeller",
+  "description": "Browser-based ultrasonic tone emitter adjustable from 15 kHz to 25 kHz. No app install required.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1c1c1e",
+  "theme_color": "#1c1c1e",
+  "orientation": "portrait",
+  "categories": ["utilities", "lifestyle"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

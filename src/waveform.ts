@@ -21,7 +21,7 @@ export function renderFrame(
 ): number {
   let sum = 0;
   for (let i = 0; i < dataArr.length; i++) {
-    const v = (dataArr[i] - 128) / 128;
+    const v = ((dataArr[i] ?? 128) - 128) / 128;
     sum += v * v;
   }
   const rms = Math.sqrt(sum / dataArr.length);
