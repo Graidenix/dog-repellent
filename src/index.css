@@ -57,9 +57,15 @@
     @apply text-text-hi bg-[#141a12] font-sans;
   }
 
-  body {
-    @apply grid place-items-center min-w-80 min-h-screen relative m-0;
-  }
+  /*body {*/
+  /*  @apply grid place-items-center min-w-80 min-h-screen relative m-0;*/
+  /*}*/
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
 }
 
 /* ── Custom font utilities ──────────────────────────────────────────────── */
