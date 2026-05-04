@@ -66,6 +66,7 @@ html,
 body {
   height: 100%;
   overflow: hidden;
+  background-color: #1c2125;
 }
 
 /* ── Custom font utilities ──────────────────────────────────────────────── */
