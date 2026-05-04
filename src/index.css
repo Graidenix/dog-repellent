@@ -54,7 +54,7 @@
 /* ── Base ───────────────────────────────────────────────────────────────── */
 @layer base {
   :root {
-    @apply text-text-hi bg-[#141a12] font-sans;
+    @apply text-text-hi bg-[#252a2e] font-sans;
   }
 
   /*body {*/
@@ -66,7 +66,7 @@ html,
 body {
   height: 100%;
   overflow: hidden;
-  background-color: #1c2125;
+  background-color: #252a2e;
 }
 
 /* ── Custom font utilities ──────────────────────────────────────────────── */
