@@ -1,12 +1,13 @@
 {
   "name": "dog-repeller",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "update-version": "bun run scripts/update-version.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",

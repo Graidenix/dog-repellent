@@ -109,11 +109,16 @@ export function DogRepeller() {
     const hzDigits = frequency.toString(); // "15000" – "25000", always 5 chars
     const kHz      = Math.round(frequency / 1000);
 
+    const clearCache = async () => {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+    };
+
     return (
         <article className={clsx(
             "group device-shell",
-            "flex flex-col overflow-hidden select-none [-webkit-tap-highlight-color:transparent]",
-            "w-full md:w-100 h-dvh",
+            "relative flex flex-col overflow-hidden select-none [-webkit-tap-highlight-color:transparent]",
+            "w-full md:w-100 h-dvh ",
             "bg-[linear-gradient(168deg,#252a2e_0%,#1c2024_35%,#1e2228_65%,#242a2e_100%)]",
             "rounded-xl",
             "shadow-[0_32px_64px_rgba(0,0,0,.95),0_0_0_1px_rgba(255,255,255,.05),inset_0_1px_0_rgba(255,255,255,.07),inset_0_-2px_0_rgba(0,0,0,.6)]",
@@ -345,6 +350,15 @@ export function DogRepeller() {
                     </p>
                 </div>
             </footer>
+            {/* ── Version badge ────────────────────────────────────────── */}
+            <button
+                className="absolute bottom-2 right-2.5 text-[10px] text-text-lo/50 font-b612 tracking-ticks cursor-pointer hover:text-text-lo transition-colors duration-150"
+                onClick={clearCache}
+                aria-label="Clear cache"
+                title="Click to clear cache"
+            >
+                v{__APP_VERSION__}
+            </button>
         </article>
     );
 }

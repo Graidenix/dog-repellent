@@ -1,5 +1,5 @@
 const CACHE = "dog-repeller-v1";
-const PRECACHE = ["/", "/icon.svg", "/manifest.webmanifest"];
+const PRECACHE = ["/", "/manifest.webmanifest", "/favicon.ico", "/apple-touch-icon.png"];
 
 self.addEventListener("install", event => {
   event.waitUntil(
@@ -23,15 +23,12 @@ self.addEventListener("fetch", event => {
   if (url.pathname.startsWith("/api/") || url.origin !== self.location.origin) return;
 
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      const fetched = fetch(event.request).then(response => {
-        if (response.ok) {
-          const copy = response.clone();
-          caches.open(CACHE).then(cache => cache.put(event.request, copy));
-        }
-        return response;
-      });
-      return cached ?? fetched;
-    })
+    fetch(event.request).then(response => {
+      if (response.ok) {
+        const copy = response.clone();
+        caches.open(CACHE).then(cache => cache.put(event.request, copy));
+      }
+      return response;
+    }).catch(() => caches.match(event.request))
   );
 });
