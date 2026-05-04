@@ -1,41 +1,91 @@
 @import "tailwindcss";
 
+/* ── Design tokens ──────────────────────────────────────────────────────── */
+@theme {
+  /* Text hierarchy (on shell background, all ≥ 4:1 contrast) */
+  --color-text-hi:          #7a9e78;
+  --color-text-lo:          #6a8668;
+
+  /* LCD panel */
+  --color-lcd-bg:           #090e08;
+  --color-lcd-label:        #508a45;
+  --color-lcd-active:       #6abf50;
+
+  /* Waveform panel */
+  --color-wave-bg:          #070c06;
+
+  /* Phosphor green — LCD segments, accents, focus ring */
+  --color-phosphor:         #7ef542;
+  --color-phosphor-bright:  #9fff58;
+
+  /* LED indicators */
+  --color-led-on:           #39ff14;
+  --color-led-on-border:    #28cc0c;
+  --color-led-off:          #182418;
+  --color-led-off-border:   #263226;
+
+  /* Shell surfaces */
+  --color-shell-border:     #252c28;
+  --color-sep:              #252c24;
+  --color-bolt:             #38443e;
+
+  /* Controls */
+  --color-tick-hi:          #5a7858;
+  --color-tick-lo:          #2e3e2c;
+  --color-bar-track:        #0c1a0a;
+  --color-bar-idle-lo:      #1a3a14;
+  --color-bar-idle-hi:      #2e5828;
+  --color-bar-on-lo:        #1e8010;
+
+  /* Button internals */
+  --color-btn-led-off:      #1e2820;
+  --color-btn-led-border:   #28b80a;
+
+  /* Custom text size — 13px (between xs=12 and sm=14) */
+  --text-2xs: 0.8125rem;
+
+  /* Custom letter-spacing (px-based, semantic names) */
+  --tracking-ticks:         0.0625rem;  /* 1px  — scale numbers    */
+  --tracking-units:         0.125rem;   /* 2px  — unit labels       */
+  --tracking-status:        0.15625rem; /* 2.5px — TX/SBY           */
+  --tracking-labels:        0.1875rem;  /* 3px  — section labels    */
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────── */
 @layer base {
   :root {
-    @apply text-[#a8c0a4] bg-[#141a12] font-sans;
+    @apply text-text-hi bg-[#141a12] font-sans;
   }
 
   body {
-    @apply grid place-items-center min-w-[320px] min-h-screen relative m-0;
+    @apply grid place-items-center min-w-80 min-h-screen relative m-0;
   }
 }
 
 /* ── Custom font utilities ──────────────────────────────────────────────── */
 @layer utilities {
-  .font-b612    { font-family: 'B612 Mono', 'Courier New', monospace; }
+  .font-b612     { font-family: 'B612 Mono', 'Courier New', monospace; }
   .font-orbitron { font-family: 'Orbitron', 'B612 Mono', monospace; }
 }
 
-/* ── LCD segment classes (applied to SVG <rect> elements) ───────────────── */
+/* ── LCD segment classes ────────────────────────────────────────────────── */
 .lcd-seg-off {
   fill: #0e1e0c;
   transition: fill 0.15s;
 }
 
 .lcd-seg-on {
-  fill: #7ef542;
+  fill: var(--color-phosphor);
   transition: fill 0.15s, filter 0.15s;
 }
 
-/* Intensified glow when device is actively emitting */
 .lcd-digit--active .lcd-seg-on {
-  fill: #9fff58;
-  filter: drop-shadow(0 0 2px rgba(126, 245, 66, 0.9));
+  fill: var(--color-phosphor-bright);
+  filter: drop-shadow(0 0 2px color-mix(in srgb, var(--color-phosphor) 90%, transparent));
 }
 
-/* Subtle glow on the entire digit when active */
 .lcd-digit--active {
-  filter: drop-shadow(0 0 5px rgba(126, 245, 66, 0.25));
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--color-phosphor) 25%, transparent));
 }
 
 /* ── Keyframes ──────────────────────────────────────────────────────────── */
@@ -68,7 +118,7 @@
 }
 
 .freq-slider:focus-visible {
-  outline: 2px solid #7ef542;
+  outline: 2px solid var(--color-phosphor);
   outline-offset: 5px;
   border-radius: 3px;
 }
