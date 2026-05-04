@@ -1,7 +1,23 @@
-import {useState, useRef, useEffect, useCallback, type CSSProperties} from "react";
+import { useState, useRef, useEffect, useCallback, type CSSProperties } from "react";
 import clsx from "clsx";
-import {MIN_FREQ, MAX_FREQ, DEFAULT_FREQ, CW, CH} from "./constants";
-import {drawIdle, renderFrame} from "./waveform";
+import { MIN_FREQ, MAX_FREQ, DEFAULT_FREQ, CW, CH } from "./constants";
+import { drawIdle, renderFrame } from "./waveform";
+import { LcdDigit } from "./LcdDigit";
+
+function CornerBolt({ className }: { className?: string }) {
+    return (
+        <svg
+            width="14" height="14" viewBox="0 0 14 14"
+            aria-hidden="true"
+            className={clsx("shrink-0 text-[#38443e]", className)}
+        >
+            <circle cx="7" cy="7" r="6" fill="#17201c" stroke="currentColor" strokeWidth="1" />
+            <circle cx="7" cy="7" r="2.2" fill="#101a14" stroke="#2a3832" strokeWidth="0.6" />
+            <line x1="4.2" y1="7" x2="9.8" y2="7" stroke="#2a3832" strokeWidth="1" />
+            <line x1="7" y1="4.2" x2="7" y2="9.8" stroke="#2a3832" strokeWidth="1" />
+        </svg>
+    );
+}
 
 export function DogRepeller() {
     const [active, setActive] = useState(false);
@@ -89,124 +105,128 @@ export function DogRepeller() {
         }
     };
 
-    const pct = ((frequency - MIN_FREQ) / (MAX_FREQ - MIN_FREQ)) * 100;
-    const kHz = Math.round(frequency / 1000).toString();
+    const pct      = ((frequency - MIN_FREQ) / (MAX_FREQ - MIN_FREQ)) * 100;
+    const hzDigits = frequency.toString(); // "15000" – "25000", always 5 chars
+    const kHz      = Math.round(frequency / 1000);
 
     return (
         <article className={clsx(
-            // "group" enables group-[.is-active]: child variants
-            // "device-shell" is the CSS media-query target for mobile
             "group device-shell",
             "flex flex-col overflow-hidden select-none [-webkit-tap-highlight-color:transparent]",
             "w-[390px] h-[min(844px,100dvh)]",
-            "bg-[linear-gradient(155deg,#2e2e30_0%,#1c1c1e_45%,#242426_100%)]",
-            "rounded-[28px]",
-            "shadow-[0_40px_80px_rgba(0,0,0,.9),0_0_0_1px_rgba(255,255,255,.07),inset_0_1px_0_rgba(255,255,255,.12),inset_0_-1px_0_rgba(0,0,0,.5)]",
-            "font-device",
+            "bg-[linear-gradient(168deg,#252a2e_0%,#1c2024_35%,#1e2228_65%,#242a2e_100%)]",
+            "rounded-[12px]",
+            "shadow-[0_32px_64px_rgba(0,0,0,.95),0_0_0_1px_rgba(255,255,255,.05),inset_0_1px_0_rgba(255,255,255,.07),inset_0_-2px_0_rgba(0,0,0,.6)]",
+            "font-b612",
             active && "is-active",
         )}>
 
             {/* ── Header ──────────────────────────────────────────────── */}
-            <header className="px-[22px] pt-[18px] pb-[14px] border-b border-white/[0.04] flex items-center justify-between shrink-0">
-
-                <div className="flex gap-[5px]" role="presentation" aria-hidden="true">
-                    {Array.from({length: 9}).map((_, i) => (
-                        <div key={i} className={clsx(
-                            "grille-dot w-[4px] h-[4px] rounded-full",
-                            "bg-[#3a3a3a] transition-[background,box-shadow] duration-300",
-                            "group-[.is-active]:bg-[#e07000] group-[.is-active]:shadow-[0_0_5px_#e07000]",
-                            "group-[.is-active]:animate-[dot-wave_1.1s_ease-in-out_infinite]",
-                        )}/>
-                    ))}
+            <header className="px-[18px] pt-[16px] pb-[14px] flex items-center justify-between shrink-0 border-b border-[#252c28]">
+                <div className="flex items-center gap-[10px]">
+                    <CornerBolt />
+                    <span className="font-orbitron text-[13px] font-semibold tracking-[2.5px] text-[#7a9e78]" aria-label="Device model ULTRAPEL 7">
+                        ULTRAPEL-7
+                    </span>
                 </div>
 
-                <span className="text-[8px] tracking-[3px] text-[#666]">ULTRAPEL-7</span>
-
-                <div
-                    className={clsx(
-                        "w-[7px] h-[7px] rounded-full border",
-                        "bg-[#2a2a2a] border-[#333]",
-                        "transition-[background,box-shadow,border-color] duration-300",
-                        "group-[.is-active]:bg-[#ff4400] group-[.is-active]:border-[#ff4400]",
-                        "group-[.is-active]:shadow-[0_0_9px_#ff4400,0_0_3px_#ff4400]",
-                        "group-[.is-active]:animate-[led-blink_0.9s_ease-in-out_infinite]",
-                    )}
-                    aria-hidden="true"
-                />
+                <div className="flex items-center gap-[10px]">
+                    {/* Status indicator — aria-hidden; screen readers get state from aria-pressed on button */}
+                    <div className="flex items-center gap-[6px]" aria-hidden="true">
+                        <div className={clsx(
+                            "w-[8px] h-[8px] rounded-full border",
+                            "transition-[background,box-shadow,border-color] duration-300",
+                            active
+                                ? "bg-[#39ff14] border-[#28cc0c] shadow-[0_0_8px_rgba(57,255,20,.9),0_0_3px_#39ff14] animate-[led-blink_1s_ease-in-out_infinite]"
+                                : "bg-[#182418] border-[#263226]",
+                        )} />
+                        <span className={clsx(
+                            "text-[12px] tracking-[2.5px] transition-colors duration-300",
+                            active ? "text-[#7a9e78]" : "text-[#6a8668]",
+                        )}>
+                            {active ? "TX" : "SBY"}
+                        </span>
+                    </div>
+                    <CornerBolt />
+                </div>
             </header>
 
-            {/* ── LCD readout ─────────────────────────────────────────── */}
+            {/* ── LCD Readout ──────────────────────────────────────────── */}
             <section
-                className="mx-[22px] mt-[16px] shrink-0 relative overflow-hidden rounded-[10px] px-[18px] py-[14px] bg-[#0b0f0b] border border-[#111] shadow-[inset_0_3px_10px_rgba(0,0,0,.9),inset_0_0_0_1px_rgba(0,0,0,.5)]"
+                className="mx-[16px] mt-[14px] shrink-0 relative overflow-hidden rounded-[8px]"
+                style={{
+                    background: "#090e08",
+                    boxShadow: "inset 0 3px 10px rgba(0,0,0,.95), inset 0 0 0 1px rgba(0,60,0,.4), 0 1px 0 rgba(255,255,255,.04)",
+                }}
                 aria-label="Frequency readout"
             >
+                {/* Scanline overlay */}
                 <div
-                    className="absolute inset-0 pointer-events-none [background:repeating-linear-gradient(0deg,transparent,transparent_3px,rgba(0,0,0,.08)_3px,rgba(0,0,0,.08)_4px)]"
+                    className="absolute inset-0 pointer-events-none z-10 [background:repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,.07)_2px,rgba(0,0,0,.07)_3px)]"
                     aria-hidden="true"
                 />
 
-                <div className={clsx(
-                    "text-[8px] tracking-[2.5px] mb-[6px] transition-colors duration-300",
-                    "text-[#6a5c28] group-[.is-active]:text-[#9a5800]",
-                )}>FREQ OUTPUT</div>
+                {/* Panel label row */}
+                <div className="flex items-center justify-between px-[14px] pt-[10px] pb-[4px]" aria-hidden="true">
+                    <span className="text-[12px] tracking-[3px] text-[#508a45]">FREQUENCY</span>
+                    <span className="text-[12px] tracking-[2px] text-[#508a45]">OUTPUT</span>
+                </div>
 
-                <div className="flex items-baseline gap-[6px]">
-                    <output className={clsx(
-                        "font-doto text-[60px] font-normal leading-none tracking-[2px]",
-                        "transition-[color,text-shadow] duration-300",
-                        "text-[#9a6800]",
-                        "group-[.is-active]:text-[#ffaa00]",
-                        "group-[.is-active]:[text-shadow:0_0_28px_rgba(255,170,0,.5),0_0_10px_rgba(255,170,0,.3)]",
-                    )}>{kHz}</output>
+                {/* 7-segment digit display */}
+                <div className="flex items-end justify-center gap-[6px] px-[14px] pt-[6px] pb-[14px]" aria-hidden="true">
+                    {hzDigits.split("").map((d, i) => (
+                        <LcdDigit key={i} char={d} active={active} width={42} height={75} />
+                    ))}
                     <span className={clsx(
-                        "font-doto text-[17px] tracking-[2px] mb-[8px]",
+                        "text-[18px] tracking-[2px] pb-[6px] ml-[4px] font-b612",
                         "transition-colors duration-300",
-                        "text-[#7a6230] group-[.is-active]:text-[#a86800]",
-                    )}>kHz</span>
+                        active ? "text-[#6abf50]" : "text-[#508a45]",
+                    )}>Hz</span>
                 </div>
 
-                <div className="mt-[10px] h-[3px] bg-[#111] rounded-[2px] overflow-hidden" role="presentation" aria-hidden="true">
+                {/* Screen-reader frequency output */}
+                <output className="sr-only" aria-live="off">{kHz} kilohertz</output>
+
+                {/* Frequency progress bar */}
+                <div className="px-[14px] pb-[10px]">
                     <div
-                        className={clsx(
-                            "h-full [transition:width_0.05s,background_0.3s,box-shadow_0.3s]",
-                            "[background:linear-gradient(90deg,#3a2200,#5a3500)]",
-                            "group-[.is-active]:[background:linear-gradient(90deg,#c05000,#ffaa00)]",
-                            "group-[.is-active]:shadow-[0_0_8px_rgba(255,170,0,.5)]",
-                        )}
-                        style={{width: `${pct}%`}}
-                    />
-                </div>
-                <div className="flex justify-between mt-[5px] text-[8px] text-[#5a5830] tracking-[1px]" aria-hidden="true">
-                    <span>15 kHz</span><span>25 kHz</span>
+                        className="h-[3px] rounded-full overflow-hidden"
+                        style={{ background: "#0c1a0a" }}
+                        role="presentation"
+                        aria-hidden="true"
+                    >
+                        <div
+                            className={clsx(
+                                "h-full rounded-full [transition:width_0.05s_linear,background_0.3s,box-shadow_0.3s]",
+                                active ? "shadow-[0_0_6px_rgba(126,245,66,.5)]" : "",
+                            )}
+                            style={{
+                                width: `${pct}%`,
+                                background: active
+                                    ? "linear-gradient(90deg, #1e8010, #7ef542)"
+                                    : "linear-gradient(90deg, #1a3a14, #2e5828)",
+                            }}
+                        />
+                    </div>
+                    <div
+                        className="flex justify-between mt-[5px] text-[12px] text-[#508a45] tracking-[1px]"
+                        aria-hidden="true"
+                    >
+                        <span>15 kHz</span>
+                        <span>25 kHz</span>
+                    </div>
                 </div>
             </section>
 
-            {/* ── Waveform ────────────────────────────────────────────── */}
-            <section
-                className="mx-[22px] mt-[10px] shrink-0 relative overflow-hidden rounded-[10px] bg-[#0b0f0b] border border-[#111]"
-                aria-label="Waveform visualizer"
-            >
-                <div
-                    className="absolute inset-0 pointer-events-none z-[1] [background:repeating-linear-gradient(0deg,transparent,transparent_3px,rgba(0,0,0,.07)_3px,rgba(0,0,0,.07)_4px)]"
-                    aria-hidden="true"
-                />
-                <span className="absolute top-[7px] left-[10px] z-[2] text-[7px] tracking-[2.5px] text-[#504820]" aria-hidden="true">
-                    WAVEFORM
-                </span>
-                <canvas ref={canvasRef} className="block w-full h-[90px]" width={CW} height={CH}/>
-            </section>
-
-            <div className="flex-1 min-h-3" aria-hidden="true"/>
-
-            {/* ── Tone control ────────────────────────────────────────── */}
-            <section className="px-[22px] pb-[18px] shrink-0" aria-label="Frequency adjustment">
+            {/* ── Frequency Control — directly under the display it updates ── */}
+            <section className="px-[18px] pt-[16px] pb-[14px] shrink-0" aria-label="Frequency adjustment">
                 <label
-                    className="flex justify-between items-center mb-[16px] text-[9px] tracking-[3px] text-[#777] uppercase cursor-default"
                     htmlFor="freq-slider"
+                    className="block text-[12px] tracking-[3px] text-[#7a9e78] uppercase mb-[14px]"
                 >
-                    <span>Tone</span>
-                    <span>Adjust</span>
+                    Frequency Control
                 </label>
+
                 <input
                     id="freq-slider"
                     type="range"
@@ -216,81 +236,182 @@ export function DogRepeller() {
                     step={1000}
                     value={frequency}
                     onChange={e => setFrequency(Number(e.target.value))}
-                    style={{"--freq-pct": `${pct}%`} as CSSProperties}
-                    aria-valuetext={`${kHz} kHz`}
+                    style={{ "--freq-pct": `${pct}%` } as CSSProperties}
+                    aria-valuetext={`${kHz} kilohertz`}
                 />
-                <div className="flex justify-between mt-[10px] text-[8px] text-[#555] tracking-[1px]" aria-hidden="true">
-                    <span>ULTRASONIC</span><span>HIGH BAND</span>
+
+                {/* Tick marks */}
+                <div className="flex justify-between mt-[8px] px-[1px]" aria-hidden="true">
+                    {Array.from({ length: 11 }).map((_, i) => (
+                        <div key={i} className={clsx(
+                            "w-px rounded-full",
+                            i === 0 || i === 5 || i === 10
+                                ? "h-[7px] bg-[#5a7858]"
+                                : "h-[4px] bg-[#2e3e2c]",
+                        )} />
+                    ))}
+                </div>
+
+                <div
+                    className="flex justify-between mt-[4px] text-[12px] text-[#6a8668] tracking-[1px]"
+                    aria-hidden="true"
+                >
+                    <span>15</span>
+                    <span>20</span>
+                    <span>25 kHz</span>
                 </div>
             </section>
 
-            <hr className="h-px border-0 bg-white/[0.03] mx-[22px]"/>
+            {/* ── Waveform — feedback panel between controls and action ── */}
+            <section
+                className="mx-[16px] shrink-0 relative overflow-hidden rounded-[8px]"
+                style={{
+                    background: "#070c06",
+                    boxShadow: "inset 0 3px 10px rgba(0,0,0,.9), inset 0 0 0 1px rgba(0,50,0,.4)",
+                }}
+                aria-label="Waveform visualizer"
+            >
+                <div
+                    className="absolute inset-0 pointer-events-none z-[1] [background:repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,.07)_2px,rgba(0,0,0,.07)_3px)]"
+                    aria-hidden="true"
+                />
+                <span
+                    className="absolute top-[8px] left-[12px] z-[2] text-[12px] tracking-[2.5px] text-[#508a45]"
+                    aria-hidden="true"
+                >
+                    WAVEFORM
+                </span>
+                <canvas
+                    ref={canvasRef}
+                    className="block w-full h-[90px]"
+                    width={CW}
+                    height={CH}
+                    aria-hidden="true"
+                />
+            </section>
 
-            {/* ── Emit button ─────────────────────────────────────────── */}
-            <footer className="px-[22px] pt-[24px] pb-[30px] flex flex-col items-center gap-[16px] shrink-0">
+            {/* ── Spacer ───────────────────────────────────────────────── */}
+            <div className="flex-1 min-h-[16px]" aria-hidden="true" />
 
-                <div className="relative flex items-center justify-center">
+            <hr className="border-0 h-px mx-[18px]" style={{ background: "#252c24" }} />
+
+            {/* ── Emit Footer ──────────────────────────────────────────── */}
+            <footer className="px-[18px] pt-[20px] pb-[28px] flex flex-col items-center gap-[14px] shrink-0">
+
+                {/* Pulse rings when active */}
+                <div className="relative w-full flex items-center justify-center">
                     {active && (
                         <>
-                            <div className="absolute w-[118px] h-[118px] rounded-full border-[1.5px] border-[rgba(255,80,0,.32)] pointer-events-none animate-[pulse-ring_1.4s_cubic-bezier(0.15,0.5,0.5,1)_0s_infinite]"    aria-hidden="true"/>
-                            <div className="absolute w-[118px] h-[118px] rounded-full border-[1.5px] border-[rgba(255,80,0,.32)] pointer-events-none animate-[pulse-ring_1.4s_cubic-bezier(0.15,0.5,0.5,1)_0.45s_infinite]" aria-hidden="true"/>
-                            <div className="absolute w-[118px] h-[118px] rounded-full border-[1.5px] border-[rgba(255,80,0,.32)] pointer-events-none animate-[pulse-ring_1.4s_cubic-bezier(0.15,0.5,0.5,1)_0.9s_infinite]"  aria-hidden="true"/>
+                            <div
+                                className="absolute pointer-events-none w-[114px] h-[114px] rounded-full border border-[rgba(57,255,20,.2)] animate-[pulse-ring_1.5s_cubic-bezier(0.15,0.5,0.5,1)_0s_infinite]"
+                                aria-hidden="true"
+                            />
+                            <div
+                                className="absolute pointer-events-none w-[114px] h-[114px] rounded-full border border-[rgba(57,255,20,.2)] animate-[pulse-ring_1.5s_cubic-bezier(0.15,0.5,0.5,1)_0.5s_infinite]"
+                                aria-hidden="true"
+                            />
+                            <div
+                                className="absolute pointer-events-none w-[114px] h-[114px] rounded-full border border-[rgba(57,255,20,.2)] animate-[pulse-ring_1.5s_cubic-bezier(0.15,0.5,0.5,1)_1s_infinite]"
+                                aria-hidden="true"
+                            />
                         </>
                     )}
 
                     <button
                         className={clsx(
-                            "relative z-[1] w-[118px] h-[118px] rounded-full",
-                            "border-none outline-none cursor-pointer [touch-action:manipulation]",
-                            "flex items-center justify-center",
-                            "[transition:transform_0.12s_cubic-bezier(0.2,0,0.3,1),box-shadow_0.2s]",
-                            "active:translate-y-[3px] active:scale-95",
-                            // idle appearance
-                            "bg-[radial-gradient(circle_at_38%_32%,#3c3c40_0%,#252528_55%,#18181a_100%)]",
-                            "shadow-[0_8px_30px_rgba(0,0,0,.9),0_0_0_1px_rgba(255,255,255,.04),inset_0_1px_0_rgba(255,255,255,.1),inset_0_-2px_6px_rgba(0,0,0,.4)]",
-                            // active appearance
-                            "group-[.is-active]:bg-[radial-gradient(circle_at_38%_32%,#ff8c3a_0%,#cc3300_55%,#8a1000_100%)]",
-                            "group-[.is-active]:shadow-[0_0_42px_rgba(255,60,0,.6),0_0_14px_rgba(255,60,0,.3),0_8px_30px_rgba(0,0,0,.9),inset_0_1px_0_rgba(255,150,80,.25),inset_0_-2px_6px_rgba(0,0,0,.4)]",
+                            "relative z-[1] w-[114px] h-[114px] rounded-full",
+                            "border-none cursor-pointer [touch-action:manipulation]",
+                            "flex flex-col items-center justify-center gap-[6px]",
+                            "[transition:transform_0.12s_cubic-bezier(0.2,0,0.3,1),box-shadow_0.2s,background_0.2s]",
+                            "active:scale-[0.96] active:translate-y-[2px]",
+                            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#7ef542]",
+                            // idle
+                            !active && [
+                                "bg-[radial-gradient(circle_at_40%_35%,#2e3638_0%,#1e2428_55%,#161c1e_100%)]",
+                                "shadow-[0_8px_28px_rgba(0,0,0,.9),0_0_0_1px_rgba(255,255,255,.05),inset_0_1px_0_rgba(255,255,255,.08),inset_0_-3px_8px_rgba(0,0,0,.5)]",
+                            ],
+                            // active
+                            active && [
+                                "bg-[radial-gradient(circle_at_40%_35%,#1e4a22_0%,#122e14_55%,#0a1e0c_100%)]",
+                                "shadow-[0_0_40px_rgba(57,255,20,.18),0_8px_28px_rgba(0,0,0,.85),0_0_0_1px_rgba(57,255,20,.12),inset_0_1px_0_rgba(126,245,66,.08),inset_0_-3px_8px_rgba(0,0,0,.5)]",
+                            ],
                         )}
                         onClick={toggle}
                         aria-pressed={active}
                         aria-label={active ? "Stop emitting ultrasonic tone" : "Start emitting ultrasonic tone"}
                     >
+                        {/* Outer ring engraving */}
                         <div
                             className={clsx(
-                                "absolute inset-[9px] rounded-full border",
-                                "border-white/[0.06] group-[.is-active]:border-[rgba(255,150,80,.2)]",
+                                "absolute inset-[8px] rounded-full border",
+                                "transition-[border-color] duration-300",
+                                active ? "border-[rgba(126,245,66,.12)]" : "border-[rgba(255,255,255,.05)]",
                             )}
                             aria-hidden="true"
                         />
+
+                        {/* Button LED dot */}
+                        <div className={clsx(
+                            "w-[9px] h-[9px] rounded-full border",
+                            "transition-[background,box-shadow,border-color] duration-200",
+                            active
+                                ? "bg-[#39ff14] border-[#28b80a] shadow-[0_0_8px_rgba(57,255,20,.9)]"
+                                : "bg-[#1e2820] border-[#2e3e2c]",
+                        )} aria-hidden="true" />
+
                         <span className={clsx(
-                            "relative text-[11px] tracking-[3px] uppercase",
+                            "text-[13px] tracking-[3px] font-semibold font-b612",
                             "transition-colors duration-200",
-                            "text-white/50 group-[.is-active]:text-white/[0.95]",
+                            active ? "text-[#7ef542]" : "text-[#6a8668]",
                         )}>
-                            {active ? "STOP" : "START"}
+                            {active ? "STOP" : "EMIT"}
                         </span>
                     </button>
                 </div>
 
-                <div className="flex items-center gap-[8px]" role="status" aria-live="polite">
-                    <div
-                        className={clsx(
-                            "w-[5px] h-[5px] rounded-full",
-                            "bg-[#252525] transition-[background,box-shadow] duration-300",
-                            "group-[.is-active]:bg-[#ff4400] group-[.is-active]:shadow-[0_0_8px_#ff4400]",
-                            "group-[.is-active]:animate-[led-blink_0.9s_ease-in-out_infinite]",
-                        )}
-                        aria-hidden="true"
-                    />
+                {/* Status text — primary announcement for screen readers */}
+                <div
+                    className="flex items-center gap-[7px]"
+                    role="status"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >
+                    <div className={clsx(
+                        "w-[6px] h-[6px] rounded-full",
+                        "transition-[background,box-shadow] duration-300",
+                        active
+                            ? "bg-[#39ff14] shadow-[0_0_6px_rgba(57,255,20,.8)] animate-[led-blink_1s_ease-in-out_infinite]"
+                            : "bg-[#1e2820]",
+                    )} aria-hidden="true" />
                     <span className={clsx(
-                        "text-[9px] tracking-[3px] transition-colors duration-300",
-                        "text-[#555] group-[.is-active]:text-[#888]",
+                        "text-[12px] tracking-[3px] transition-colors duration-300 font-b612",
+                        active ? "text-[#7a9e78]" : "text-[#6a8668]",
                     )}>
-                        {active ? "EMITTING" : "STANDBY"}
+                        {active ? "TRANSMITTING" : "STANDBY"}
                     </span>
                 </div>
 
+                {/* Disclaimer */}
+                <div className="flex items-start gap-[8px] px-[4px] mt-3">
+                    <svg
+                        width="14" height="14" viewBox="0 0 14 14"
+                        aria-hidden="true"
+                        className="shrink-0 mt-[1px] text-[#6a8668]"
+                    >
+                        <path
+                            d="M7 1.5 L13 12.5 H1 Z"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.2"
+                            strokeLinejoin="round"
+                        />
+                        <line x1="7" y1="5.5" x2="7" y2="9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+                        <circle cx="7" cy="11" r="0.7" fill="currentColor" />
+                    </svg>
+                    <p className="text-[10px] leading-normal text-[#6a8668] font-b612">
+                        Results may vary. Effectiveness is not guaranteed for all dog breeds or individual animals.
+                    </p>
+                </div>
             </footer>
         </article>
     );
