@@ -20,12 +20,20 @@ This is a Vite + React 19 + Tailwind CSS v4 SPA deployed to Vercel. The single p
 - `vercel.json` — SPA routing: rewrites all paths to `/index.html`.
 - `src/main.tsx` — React entry: mounts `<App>` into `#root`.
 - `src/App.tsx` — root component. Imports `index.css` and renders `<DogRepeller>`.
-- `src/DogRepeller.tsx` — the main UI component. Uses Tailwind utility classes with `clsx`, semantic HTML, and the `group` + `is-active` pattern for active-state styles.
+- `src/DogRepeller.tsx` — shell component: owns audio-engine state/refs, orchestrates subcomponents.
+- `src/LcdReadout.tsx` — green LCD display: Hz digits, unit label, frequency progress bar.
+- `src/WaveformDisplay.tsx` — canvas waveform section with scanline overlay.
+- `src/FrequencyControl.tsx` — range slider, tick marks, and kHz labels.
+- `src/EmitButton.tsx` — pulse rings + circular EMIT/STOP button.
+- `src/EmitDisclaimer.tsx` — warning icon + disclaimer text.
+- `src/LcdDigit.tsx` — single 7-segment LCD digit renderer.
+- `src/CornerBolt.tsx` — decorative corner bolt SVG.
 - `src/constants.ts` — shared numeric constants (`MIN_FREQ`, `MAX_FREQ`, `DEFAULT_FREQ`, canvas dimensions).
 - `src/waveform.ts` — pure canvas draw utilities: `drawIdle()` and `renderFrame()`.
+- `src/useLocalStorage.ts` — typed hook for persisting state in `localStorage`.
 - `src/index.css` — Tailwind v4 import + custom CSS (keyframes, nth-child stagger delays, slider pseudo-elements, mobile breakpoint).
 - `src/vite-env.d.ts` — Vite client type reference.
-- `public/` — static assets served at `/`: favicons, `manifest.webmanifest`, `sw.js`.
+- `public/` — static assets served at `/`: favicons, `site.webmanifest`, `sw.js`.
 
 **Styling:** Tailwind v4 via `@tailwindcss/vite` (registered in `vite.config.ts`). No Tailwind config file needed for v4.
 

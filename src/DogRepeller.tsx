@@ -137,14 +137,14 @@ const DogRepeller: React.FC = () => {
             <div className="flex-1 min-h-4" aria-hidden="true" />
 
             {/* ── Emit Footer ──────────────────────────────────────────── */}
-            <footer className="px-4.5 pt-5 pb-7 flex flex-col items-center gap-3.5 shrink-0">
+            <footer className="px-4.5 pt-5 pb-7 flex flex-col items-center gap-6 shrink-0">
                 <EmitButton active={active} onToggle={handleToggle} />
                 <hr className="border-0 h-px w-full bg-sep" />
                 <EmitDisclaimer />
             </footer>
 
             <button
-                className="absolute bottom-2 right-2.5 text-[10px] text-text-lo/50 font-b612 tracking-ticks cursor-pointer hover:text-text-lo transition-colors duration-150"
+                className="absolute bottom-6 right-8 text-[10px] text-text-lo/50 font-b612 tracking-ticks cursor-pointer hover:text-text-lo transition-colors duration-150"
                 onClick={handleClearCache}
                 aria-label="Clear cache"
                 title="Click to clear cache"

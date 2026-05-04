@@ -1,7 +1,7 @@
 import React from "react";
 
 const EmitDisclaimer: React.FC = () => (
-    <div className="flex items-start gap-2 px-1 mt-3">
+    <div className="flex items-start gap-2 px-1">
         <svg
             width="14" height="14" viewBox="0 0 14 14"
             aria-hidden="true"
