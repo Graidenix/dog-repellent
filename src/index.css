@@ -14,6 +14,7 @@
 @layer utilities {
   .font-device { font-family: 'Courier New', 'Lucida Console', monospace; }
   .font-lcd    { font-family: 'Share Tech Mono', 'Courier New', monospace; }
+  .font-doto   { font-family: 'Doto', 'Share Tech Mono', monospace; }
 }
 
 /* ── Keyframes ──────────────────────────────────────────────────────────── */

@@ -120,7 +120,7 @@ export function DogRepeller() {
                     ))}
                 </div>
 
-                <span className="text-[8px] tracking-[3px] text-[#3a3a3a]">ULTRAPEL-7</span>
+                <span className="text-[8px] tracking-[3px] text-[#666]">ULTRAPEL-7</span>
 
                 <div
                     className={clsx(
@@ -147,21 +147,21 @@ export function DogRepeller() {
 
                 <div className={clsx(
                     "text-[8px] tracking-[2.5px] mb-[6px] transition-colors duration-300",
-                    "text-[#2e2a1a] group-[.is-active]:text-[#5a3500]",
+                    "text-[#6a5c28] group-[.is-active]:text-[#9a5800]",
                 )}>FREQ OUTPUT</div>
 
                 <div className="flex items-baseline gap-[6px]">
                     <output className={clsx(
-                        "font-lcd text-[60px] font-normal leading-none tracking-[2px]",
+                        "font-doto text-[60px] font-normal leading-none tracking-[2px]",
                         "transition-[color,text-shadow] duration-300",
-                        "text-[#7a5000]",
+                        "text-[#9a6800]",
                         "group-[.is-active]:text-[#ffaa00]",
                         "group-[.is-active]:[text-shadow:0_0_28px_rgba(255,170,0,.5),0_0_10px_rgba(255,170,0,.3)]",
                     )}>{kHz}</output>
                     <span className={clsx(
-                        "font-lcd text-[17px] tracking-[2px] mb-[8px]",
+                        "font-doto text-[17px] tracking-[2px] mb-[8px]",
                         "transition-colors duration-300",
-                        "text-[#3a2e00] group-[.is-active]:text-[#7a4f00]",
+                        "text-[#7a6230] group-[.is-active]:text-[#a86800]",
                     )}>kHz</span>
                 </div>
 
@@ -176,7 +176,7 @@ export function DogRepeller() {
                         style={{width: `${pct}%`}}
                     />
                 </div>
-                <div className="flex justify-between mt-[5px] text-[8px] text-[#2a2a1a] tracking-[1px]" aria-hidden="true">
+                <div className="flex justify-between mt-[5px] text-[8px] text-[#5a5830] tracking-[1px]" aria-hidden="true">
                     <span>15 kHz</span><span>25 kHz</span>
                 </div>
             </section>
@@ -190,7 +190,7 @@ export function DogRepeller() {
                     className="absolute inset-0 pointer-events-none z-[1] [background:repeating-linear-gradient(0deg,transparent,transparent_3px,rgba(0,0,0,.07)_3px,rgba(0,0,0,.07)_4px)]"
                     aria-hidden="true"
                 />
-                <span className="absolute top-[7px] left-[10px] z-[2] text-[7px] tracking-[2.5px] text-[#2a2000]" aria-hidden="true">
+                <span className="absolute top-[7px] left-[10px] z-[2] text-[7px] tracking-[2.5px] text-[#504820]" aria-hidden="true">
                     WAVEFORM
                 </span>
                 <canvas ref={canvasRef} className="block w-full h-[90px]" width={CW} height={CH}/>
@@ -201,7 +201,7 @@ export function DogRepeller() {
             {/* ── Tone control ────────────────────────────────────────── */}
             <section className="px-[22px] pb-[18px] shrink-0" aria-label="Frequency adjustment">
                 <label
-                    className="flex justify-between items-center mb-[16px] text-[9px] tracking-[3px] text-[#444] uppercase cursor-default"
+                    className="flex justify-between items-center mb-[16px] text-[9px] tracking-[3px] text-[#777] uppercase cursor-default"
                     htmlFor="freq-slider"
                 >
                     <span>Tone</span>
@@ -219,7 +219,7 @@ export function DogRepeller() {
                     style={{"--freq-pct": `${pct}%`} as CSSProperties}
                     aria-valuetext={`${kHz} kHz`}
                 />
-                <div className="flex justify-between mt-[10px] text-[8px] text-[#333] tracking-[1px]" aria-hidden="true">
+                <div className="flex justify-between mt-[10px] text-[8px] text-[#555] tracking-[1px]" aria-hidden="true">
                     <span>ULTRASONIC</span><span>HIGH BAND</span>
                 </div>
             </section>
@@ -266,7 +266,7 @@ export function DogRepeller() {
                         <span className={clsx(
                             "relative text-[11px] tracking-[3px] uppercase",
                             "transition-colors duration-200",
-                            "text-white/30 group-[.is-active]:text-white/[0.95]",
+                            "text-white/50 group-[.is-active]:text-white/[0.95]",
                         )}>
                             {active ? "STOP" : "START"}
                         </span>
@@ -285,7 +285,7 @@ export function DogRepeller() {
                     />
                     <span className={clsx(
                         "text-[9px] tracking-[3px] transition-colors duration-300",
-                        "text-[#2d2d2d] group-[.is-active]:text-[#555]",
+                        "text-[#555] group-[.is-active]:text-[#888]",
                     )}>
                         {active ? "EMITTING" : "STANDBY"}
                     </span>
