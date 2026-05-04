@@ -113,7 +113,7 @@ export function DogRepeller() {
         <article className={clsx(
             "group device-shell",
             "flex flex-col overflow-hidden select-none [-webkit-tap-highlight-color:transparent]",
-            "w-97.5 h-[min(844px,100dvh)]",
+            "w-full md:w-100 h-dvh",
             "bg-[linear-gradient(168deg,#252a2e_0%,#1c2024_35%,#1e2228_65%,#242a2e_100%)]",
             "rounded-xl",
             "shadow-[0_32px_64px_rgba(0,0,0,.95),0_0_0_1px_rgba(255,255,255,.05),inset_0_1px_0_rgba(255,255,255,.07),inset_0_-2px_0_rgba(0,0,0,.6)]",
